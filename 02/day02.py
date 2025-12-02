@@ -9,45 +9,26 @@ class Range:
         size_end = len(str(self.stop))
 
         # get all divisors of size_start and size_end
+        invalid_ids = set()
+        for n in range(size_start, size_end + 1):
+            divisors = set()
+            for i in range(1, n + 1):
+                if n % i == 0:
+                    divisors.add(i)
+            # for each divisor, generate repeating sequences and check if they are in the range
 
-        # for n in range(size_start, size_end + 1):
-        divisors_start = set()
-        divisors_end = set()
-        for i in range(1, size_start + 1):
-            if size_start % i == 0:
-                divisors_start.add(i)
-        for i in range(1, size_end + 1):
-            if size_end % i == 0:
-                divisors_end.add(i)
-        # for each divisor, generate repeating sequences and check if they are in the range
-        invalid_ids_start = set()
-        for div in divisors_start:
-            if div == size_start:
-                continue
-            repeat_count = size_start // div
-            for seq in range(10 ** (div - 1), 10**div + 1):
-                seq_str = str(seq)
-                num_str = seq_str * repeat_count
-                num = int(num_str)
-                #  print(f"Seq: {seq}, Generated number: {num}")
-                if num >= self.start and num <= self.stop:
-                    invalid_ids_start.add(num)
+            for div in divisors:
+                if div == n:
+                    continue
+                repeat_count = n // div
+                for seq in range(10 ** (div - 1), 10**div + 1):
+                    seq_str = str(seq)
+                    num_str = seq_str * repeat_count
+                    num = int(num_str)
+                    #  print(f"Seq: {seq}, Generated number: {num}")
+                    if num >= self.start and num <= self.stop:
+                        invalid_ids.add(num)
 
-        if size_start == size_end:
-            invalid_ids = invalid_ids_start
-            return sorted(list(invalid_ids))
-        invalid_ids_end = set()
-        for div in divisors_end:
-            if div == size_end:
-                continue
-            repeat_count = size_end // div
-            for seq in range(10 ** (div - 1), 10**div + 1):
-                seq_str = str(seq)
-                num_str = seq_str * repeat_count
-                num = int(num_str)
-                if num >= self.start and num <= self.stop:
-                    invalid_ids_end.add(num)
-        invalid_ids = invalid_ids_start.union(invalid_ids_end)
         return sorted(list(invalid_ids))
 
     def find_invalid_ids_partA(self):
